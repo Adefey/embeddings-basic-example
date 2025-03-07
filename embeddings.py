@@ -67,7 +67,7 @@ class Embeddings:
             self.checkpoint, trust_remote_code=True, torch_dtype=self.dtype
         ).to(self.device)
 
-    def encode_batch(self, texts: list[str]) -> np.ndarray[np.ndarray]:
+    def encode_batch(self, texts: list[str]) -> np.ndarray:
         """
         Encode multiple strings, get array of embeddings
         """
@@ -94,17 +94,24 @@ class Embeddings:
         return result
 
 
+def dot_product_similarity(e1: np.ndarray, e2: np.ndarray) -> float:
+    """
+    Dot product similarity between two vectors (embeddings), value range: [-inf, inf]
+    """
+    return np.dot(e1, e2)
+
+
 def cosine_similarity(e1: np.ndarray, e2: np.ndarray) -> float:
     """
     Cosine similarity between two vectors (embeddings), value range: [-1, 1]
     """
-    return np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2))
+    norm1 = np.linalg.norm(e1)
+    norm2 = np.linalg.norm(e2)
+    return np.dot(e1, e2) / (norm1 * norm2) if norm1 > 0 and norm2 > 0 else 0.0
 
 
 def normalized_cosine_similarity(e1: np.ndarray, e2: np.ndarray) -> float:
     """
     Normalized cosine similarity between two vectors (embeddings), value range: [0, 1]
     """
-    return (
-        np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2))
-    ) * 0.5 + 0.5
+    return (cosine_similarity(e1, e2) + 1) / 2

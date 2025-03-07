@@ -7,4 +7,4 @@ cos_sim = model.cosine_similarity(e1, e2)
 cos_sim_norm = model.normalized_cosine_similarity(e1, e2)
 
 print(cos_sim)
-print(cos_sim_norm)
+print(type(cos_sim_norm))

@@ -5,8 +5,15 @@ import torch
 
 
 class Embeddings:
+    """
+    Wrapper for XLMRobertaLoRA
+    """
 
     class EmbeddingDim(IntEnum):
+        """
+        Size of embedding
+        """
+
         DIM32 = 32
         DIM64 = 64
         DIM128 = 128
@@ -16,6 +23,10 @@ class Embeddings:
         DIM1024 = 1024
 
     class Task(StrEnum):
+        """
+        Task passed to encode methods
+        """
+
         RETRIEVAL_QUERY = "retrieval.query"
         RETRIEVAL_PASSAGE = "retrieval.passage"
         SEPARATION = "separation"
@@ -23,6 +34,10 @@ class Embeddings:
         TEXT_MATCHING = "text-matching"
 
     class Device(StrEnum):
+        """
+        Device to run model on
+        """
+
         CPU = "cpu"
         CUDA = "cuda"
         MPS = "mps"
@@ -52,7 +67,10 @@ class Embeddings:
             self.checkpoint, trust_remote_code=True, torch_dtype=self.dtype
         ).to(self.device)
 
-    def encode_batch(self, texts: list[str]):
+    def encode_batch(self, texts: list[str]) -> np.ndarray[np.ndarray]:
+        """
+        Encode multiple strings, get array of embeddings
+        """
         with torch.no_grad():
             result = self.model.encode(
                 texts,
@@ -62,7 +80,10 @@ class Embeddings:
             )
         return result
 
-    def encode_text(self, text: str):
+    def encode_text(self, text: str) -> np.ndarray:
+        """
+        Encode one string, return one embedding
+        """
         with torch.no_grad():
             result = self.model.encode(
                 [text],
@@ -72,8 +93,14 @@ class Embeddings:
             )[0]
         return result
 
-    def cosine_similarity(self, e1: np.ndarray, e2: np.ndarray):
+    def cosine_similarity(self, e1: np.ndarray, e2: np.ndarray) -> float:
+        """
+        Cosine similarity between two vectors (embeddings), value range: [-1, 1]
+        """
         return np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2))
 
-    def normalized_cosine_similarity(self, e1: np.ndarray, e2: np.ndarray):
+    def normalized_cosine_similarity(self, e1: np.ndarray, e2: np.ndarray) -> float:
+        """
+        Normalized cosine similarity between two vectors (embeddings), value range: [0, 1]
+        """
         return (np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2))) * 0.5 + 0.5

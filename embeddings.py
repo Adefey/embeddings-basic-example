@@ -1,5 +1,5 @@
 import numpy as np
-from enum import ReprEnum, IntEnum, StrEnum
+from enum import IntEnum, StrEnum
 from transformers import AutoModel
 import torch
 

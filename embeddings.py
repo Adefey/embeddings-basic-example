@@ -93,14 +93,18 @@ class Embeddings:
             )[0]
         return result
 
-    def cosine_similarity(self, e1: np.ndarray, e2: np.ndarray) -> float:
-        """
-        Cosine similarity between two vectors (embeddings), value range: [-1, 1]
-        """
-        return np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2))
 
-    def normalized_cosine_similarity(self, e1: np.ndarray, e2: np.ndarray) -> float:
-        """
-        Normalized cosine similarity between two vectors (embeddings), value range: [0, 1]
-        """
-        return (np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2))) * 0.5 + 0.5
+def cosine_similarity(e1: np.ndarray, e2: np.ndarray) -> float:
+    """
+    Cosine similarity between two vectors (embeddings), value range: [-1, 1]
+    """
+    return np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2))
+
+
+def normalized_cosine_similarity(e1: np.ndarray, e2: np.ndarray) -> float:
+    """
+    Normalized cosine similarity between two vectors (embeddings), value range: [0, 1]
+    """
+    return (
+        np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2))
+    ) * 0.5 + 0.5

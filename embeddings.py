@@ -72,5 +72,8 @@ class Embeddings:
             )[0]
         return result
 
-    def similarity(self, e1: np.ndarray, e2: np.ndarray):
-        return np.dot(e1, e2)
+    def cosine_similarity(self, e1: np.ndarray, e2: np.ndarray):
+        return np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2))
+
+    def normalized_cosine_similarity(self, e1: np.ndarray, e2: np.ndarray):
+        return (np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2))) * 0.5 + 0.5
